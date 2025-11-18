@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "lucide-react";
+import { Calendar, Info } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
@@ -82,12 +83,7 @@ const Equipment = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
-      <header className="border-b border-border bg-card shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <h1 className="text-2xl font-bold text-foreground">Equipment Rental</h1>
-          <p className="text-sm text-muted-foreground">Rent tractors, harvesters, and more</p>
-        </div>
-      </header>
+      <Header title="Equipment Rental" subtitle="Rent tractors, harvesters, and more" />
 
       <div className="mx-auto max-w-7xl px-4 py-6">
         {equipment.length === 0 ? (
@@ -163,9 +159,24 @@ const Equipment = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
-            <div className="rounded-lg bg-muted p-4">
-              <p className="text-sm text-muted-foreground">Rate: ₹{selectedEquipment?.price_per_hour}/hour</p>
-              <p className="text-sm text-muted-foreground">Seller: {selectedEquipment?.profiles?.name}</p>
+            <div className="rounded-lg bg-muted p-4 space-y-2">
+              <div className="flex items-start gap-2">
+                <Info className="h-4 w-4 text-primary mt-0.5" />
+                <div className="space-y-1 flex-1">
+                  <p className="text-sm font-medium">Booking Details</p>
+                  <p className="text-sm text-muted-foreground">Rate: ₹{selectedEquipment?.price_per_hour}/hour</p>
+                  <p className="text-sm text-muted-foreground">Seller: {selectedEquipment?.profiles?.name}</p>
+                  {startDate && endDate && (
+                    <p className="text-sm font-medium text-primary pt-2">
+                      Estimated Cost: ₹
+                      {Math.ceil(
+                        (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+                          (1000 * 60 * 60)
+                      ) * selectedEquipment?.price_per_hour}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <DialogFooter>
