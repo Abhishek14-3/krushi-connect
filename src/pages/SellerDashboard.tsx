@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Package, Plus, TrendingUp } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { Header } from "@/components/Header";
+import { Package, Plus, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -47,13 +48,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
-      {/* Header */}
-      <header className="border-b border-border bg-card shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <h1 className="text-2xl font-bold text-foreground">Seller Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Manage your equipment and bookings</p>
-        </div>
-      </header>
+      <Header title="Seller Dashboard" subtitle="Manage your equipment and bookings" />
 
       <div className="mx-auto max-w-7xl px-4 py-6 space-y-6">
         {/* Stats Cards */}

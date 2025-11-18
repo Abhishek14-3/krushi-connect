@@ -15,6 +15,7 @@ import MyEquipment from "./pages/MyEquipment";
 import Bookings from "./pages/Bookings";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import OrderTracking from "./pages/OrderTracking";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["farmer"]}>
                   <Laborers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tracking"
+              element={
+                <ProtectedRoute allowedRoles={["farmer"]}>
+                  <OrderTracking />
                 </ProtectedRoute>
               }
             />
