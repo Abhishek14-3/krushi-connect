@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Briefcase, User, DollarSign, Award } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { Header } from "@/components/Header";
+import { Briefcase, User, DollarSign, Award } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
@@ -57,13 +58,7 @@ const LaborerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
-      {/* Header */}
-      <header className="border-b border-border bg-card shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <h1 className="text-2xl font-bold text-foreground">Laborer Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Manage your profile and find work</p>
-        </div>
-      </header>
+      <Header title="Laborer Dashboard" subtitle="Manage your profile and find work" />
 
       <div className="mx-auto max-w-7xl px-4 py-6 space-y-6">
         {/* Availability Toggle */}
