@@ -1,4 +1,4 @@
-import { Home, ShoppingBag, User, Package, Briefcase } from "lucide-react";
+import { Home, ShoppingBag, User, Package, Briefcase, Truck } from "lucide-react";
 import { NavLink } from "./NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -15,7 +15,7 @@ export const BottomNav = () => {
         ...baseItems,
         { to: "/marketplace", icon: ShoppingBag, label: "Shop" },
         { to: "/equipment", icon: Package, label: "Rent" },
-        { to: "/laborers", icon: Briefcase, label: "Hire" },
+        { to: "/tracking", icon: Truck, label: "Track" },
         { to: "/profile", icon: User, label: "Profile" },
       ];
     }

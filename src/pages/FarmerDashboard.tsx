@@ -3,10 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Cloud, Package, Users, ShoppingBag, Tractor } from "lucide-react";
+import { Package, Users, ShoppingBag, Tractor } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { Header } from "@/components/Header";
+import { WeatherWidget } from "@/components/WeatherWidget";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const FarmerDashboard = () => {
   const { user } = useAuth();
@@ -16,7 +19,40 @@ const FarmerDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+
+    // Realtime subscription for booking updates
+    const channel = supabase
+      .channel("farmer-bookings")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "bookings",
+          filter: `farmer_id=eq.${user?.id}`,
+        },
+        (payload) => {
+          if (payload.new.status === "approved") {
+            toast({
+              title: "Booking Approved! 🎉",
+              description: `Your booking has been approved by the seller.`,
+            });
+          } else if (payload.new.status === "rejected") {
+            toast({
+              title: "Booking Rejected",
+              description: "Unfortunately, your booking was rejected.",
+              variant: "destructive",
+            });
+          }
+          fetchDashboardData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const fetchDashboardData = async () => {
     // Fetch available equipment
@@ -48,36 +84,11 @@ const FarmerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
-      {/* Header */}
-      <header className="border-b border-border bg-card shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <h1 className="text-2xl font-bold text-foreground">Farmer Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Welcome back!</p>
-        </div>
-      </header>
+      <Header title="Farmer Dashboard" subtitle="Welcome back!" />
 
       <div className="mx-auto max-w-7xl px-4 py-6 space-y-6">
         {/* Weather Widget */}
-        <Card className="border-border shadow-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Cloud className="h-5 w-5 text-primary" />
-              Today's Weather
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-3xl font-bold text-foreground">24°C</p>
-                <p className="text-sm text-muted-foreground">Partly Cloudy</p>
-              </div>
-              <div className="text-right text-sm text-muted-foreground">
-                <p>Humidity: 65%</p>
-                <p>Wind: 12 km/h</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <WeatherWidget />
 
         {/* Quick Actions */}
         <div className="grid gap-4 md:grid-cols-3">
